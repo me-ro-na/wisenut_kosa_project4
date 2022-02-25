@@ -1,0 +1,38 @@
+- 굳이 설치하고 싶지 않을 때
+    cmd창을 열고
+    > cd 프로젝트 파일 위치
+    > set_init.bat
+    중간중간 y/n나오면 y 해주고, Done init welcome pj4 나올때까지 대기
+    중간 오류나오면 팀장 호출바람
+    아래 과정 생략 가능
+=========================================================================================================================================================================================================
+** 내가 굳이 설치를 해보고 싶다 하면 하시면 됩니다
+
+- 가상환경 서버 설정
+    (base) > conda create -n pj4 python=3.8
+    (base) > activate pj4
+    (pj4) > conda install -c conda-forge numpy=1.19.5 jupyterlab pandas seaborn xlrd openpyxl pymysql sqlalchemy scikit-learn xgboost tensorflow nltk JPype1 gensim=3.8.3 python-levenshtein
+    (pj4) > python -m pip install --no-cache-dir konlpy PyKomoran kss
+    (pj4) > pip install Flask
+
+- 데이터 베이스(create, export, import)
+    * MySql Client 프로그램에서 실행(로그인 후)
+    * Database 생성
+        [none] > CREATE DATABASE pj4 CHARACTER SET = 'utf8'
+    * DB 접근
+        [none] > USE pj4
+        [pj4] > 
+    * import(데이터베이스 복원)
+        [none] > quit
+        local > cd C:\Program Files\MariaDB 10.7\bin
+        local > mysql -u root -p pj4 < 파일위치\파일명.sql
+    * export(데이터베이스 백업)
+        [none] > quit
+        local > cd C:\Program Files\MariaDB 10.7\bin
+        local > mysql -u root -p pj4 > 저장할위치\파일명.sql
+
+- project 실행
+    * VSCode
+        # ctrl + k + o -> project최상위 폴더 열기
+        # init.txt 대로 실행
+        # VSCode 내에서 터미널 실행
