@@ -1,29 +1,13 @@
-<<<<<<< HEAD
-#%%
-import pymysql
-from bs4 import BeautifulSoup
-import requests
-import datetime
-import pandas as pd
-import time
-from selenium import webdriver
-=======
 from bs4 import BeautifulSoup
 import pandas as pd
 from selenium import webdriver
 import os, time, datetime
->>>>>>> e14ae926640bd5802609950a5e54163ba27b2e4d
 
 def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
 design = []
-<<<<<<< HEAD
-
-browser = webdriver.Chrome('D:\chromedriver.exe')
-=======
 browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
->>>>>>> e14ae926640bd5802609950a5e54163ba27b2e4d
 
 page_number = 1
 run=True
@@ -40,27 +24,11 @@ while run:
   for i in range(len(figs)):
     a = del_html_tag(str(figs[i].find_all("a")))
     design.append(a)
-<<<<<<< HEAD
-    print(a)
-    print(len(design))
-=======
->>>>>>> e14ae926640bd5802609950a5e54163ba27b2e4d
   if int(last_page) == page_number:
     run = False
   else:
     page_number +=1
 
-<<<<<<< HEAD
-
-#%%
-df = pd.DataFrame({'list':design})
-def save_csv(df):
-    df.to_csv('designersincheon.csv',mode ='w',encoding='utf-8')
-
-save_csv(df)  
-
-# %%
-=======
 df = pd.DataFrame({'list':design})
 
 print("[DESIGNERS_HOTEL] data to csv file")
@@ -70,4 +38,3 @@ fName = f'crawling/datas/questions/hotel_designersincheon_{dt.year}_{dt.month}_{
 fName = rf'{os.path.abspath(fName)}'
 
 df.to_csv(fName, sep=',', encoding='utf-8-sig', index=False)
->>>>>>> e14ae926640bd5802609950a5e54163ba27b2e4d
