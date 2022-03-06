@@ -1,18 +1,13 @@
-#%%
-import pymysql
 from bs4 import BeautifulSoup
-import requests
-import datetime
 import pandas as pd
-import time
+import time, os, datetime
 from selenium import webdriver
 
 def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
 boutique = []
-
-browser = webdriver.Chrome('D:\chromedriver.exe')
+browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
 
 page_number = 1
 run=True
@@ -29,17 +24,18 @@ while run:
   for i in range(len(figs)):
     a = del_html_tag(str(figs[i].find_all("a")))
     boutique.append(a)
-    print(a)
-    print(len(boutique))
   if int(last_page) == page_number:
     run = False
   else:
     page_number +=1
 
 
-#%%
 df = pd.DataFrame({'list':boutique})
-def save_csv(df):
-    df.to_csv('boutique9.csv',mode ='w',encoding='utf-8')
 
-save_csv(df)  
+print("[BOUTIQUE9_HOTEL] data to csv file")
+
+dt = datetime.datetime.now()
+fName = f'crawling/datas/questions/hotel_boutique9_{dt.year}_{dt.month}_{dt.day}.csv'
+fName = rf'{os.path.abspath(fName)}'
+
+df.to_csv(fName, sep=',', encoding='utf-8-sig', index=False)

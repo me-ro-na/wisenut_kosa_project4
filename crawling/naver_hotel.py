@@ -3,9 +3,7 @@ import datetime, os, time
 import pandas as pd
 from selenium import webdriver
 
-driver_url = rf"{os.path.abspath('crawling/chromedriver')}"
-print(driver_url)
-driver = webdriver.Chrome(driver_url)
+driver = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
 
 detail_url = []
 title_list = []
@@ -49,14 +47,11 @@ while True:
         break
     cnt += 1
 
-# def del_html_tag(raw_text):
-#     return BeautifulSoup(raw_text, "lxml").text
-
-print("[NAVER] data to csv file")
+print("[NAVER_HOTEL] data to csv file")
 resultDict = dict(Questions = title_list)
 
 dt = datetime.datetime.now()
-fName = f'crawling/naver_hotel_{dt.year}_{dt.month}_{dt.day}.csv'
+fName = f'crawling/questions/hotel_naver_{dt.year}_{dt.month}_{dt.day}.csv'
 fName = rf'{os.path.abspath(fName)}'
 df = pd.DataFrame(resultDict)
 
