@@ -7,6 +7,7 @@ def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
 design = []
+# browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
 browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
 
 page_number = 1
@@ -22,14 +23,17 @@ while run:
   soup = BeautifulSoup(html,'html.parser') 
   figs = soup.find_all("div", "area")
   for i in range(len(figs)):
-    a = del_html_tag(str(figs[i].find_all("a")))
-    design.append(a)
+    a = del_html_tag(str(figs[i].find_all("a")[0]).replace("비밀글", "")).strip()
+    if("답글RE" not in a and a not in design):
+        design.append(a)
+
   if int(last_page) == page_number:
     run = False
   else:
     page_number +=1
 
-df = pd.DataFrame({'list':design})
+resultDict = dict(Questions = design)
+df = pd.DataFrame(resultDict)
 
 print("[DESIGNERS_HOTEL] data to csv file")
 
