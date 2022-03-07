@@ -6,9 +6,7 @@ from selenium import webdriver
 def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
-# file_path = './mango_200.txt'
 file_path = rf"{os.path.abspath('crawling/datas/pre_data/mango(1_226).txt')}"
-# file_path = rf"{os.path.abspath('datas/pre_data/mango(1_226).txt')}"
 
 with open(file_path, 'rt', encoding='UTF8') as f:
   lines = f.readlines()
@@ -35,7 +33,7 @@ food_list = []
 food_url = []
 
 browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
-# browser = webdriver.Chrome(rf"{os.path.abspath('utils/chromedriver')}")
+
 for idx, data in enumerate(lines):
   page_number = 1
   run=True
@@ -62,7 +60,7 @@ for idx, data in enumerate(lines):
         food_url.append(i)
 
 food_len = len(food_url)
-addr_list = [0] * food_len # 주소
+addr_list = [[0]] * food_len # 주소
 call_list = [0] * food_len # 전화번호
 type_list = [0] * food_len # 음식종류
 pran_list = [0] * food_len # 가격대
@@ -71,6 +69,7 @@ time_list = [0] * food_len # 영업시간
 break_list = [0] * food_len # 쉬는시간
 holi_list = [0] * food_len # 휴일
 menu_list = [0] * food_len # 메뉴
+price_list = [0] * food_len # 메뉴
 
 # 한 페이지 안에 있는 맛집 상세정보 가져오기
 for i in range(len(food_url)):
@@ -97,8 +96,11 @@ for i in range(len(food_url)):
     info1 = trs[j].find("th", text="주소")
     if(info1 is not None):
       info1_tr = info1.parent
-      a = del_html_tag(str(info1_tr.find_all("td")))
-      addr_list[i] = a
+      addr = del_html_tag(str(info1_tr.find_all("td")[0])).split("지번")
+      addrs = []
+      addrs.append(addr[0].strip())
+      addrs.append(addr[1].strip())
+      addr_list[i] = addrs
 
     info2 = trs[j].find("th", text="전화번호")
     if(info2 is not None):
@@ -145,11 +147,19 @@ for i in range(len(food_url)):
     info9 = trs[j].find("th", text="메뉴")
     if(info9 is not None):
       info9_tr = info9.parent
-      j = del_html_tag(str(info9_tr.find_all("td")))
-      menu_list[i] = j
+      j = info9_tr.find_all("td")[0]
+      lis = j.find_all("li")
+      menu = []
+      price = []
+      for li in lis:
+        menu.append(li.find("span", "Restaurant_Menu").text)
+        price.append(li.find("span", "Restaurant_MenuPrice").text)
+      menu_list[i] = menu
+      price_list[i] = price
 
   #리뷰
-  try:review_list.append(soup.select_one('li:nth-child(1) > a > div.RestaurantReviewItem__ReviewContent > div > p').get_text())
+  review = soup.select_one('li:nth-child(1) > a > div.RestaurantReviewItem__ReviewContent > div > p').get_text().strip()
+  try:review_list.append(review)
   except:review_list.append("")
 
   # 이미지
