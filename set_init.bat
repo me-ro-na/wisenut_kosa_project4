@@ -7,6 +7,8 @@ call activate pj4
 call conda install -c conda-forge numpy=1.19.5 jupyterlab pandas seaborn xlrd openpyxl pymysql sqlalchemy scikit-learn xgboost tensorflow nltk JPype1 gensim=3.8.3 python-levenshtein
 call python -m pip install --no-cache-dir konlpy PyKomoran kss
 call pip install Flask
+call pip install BeautifulSoup4
+call pip install selenium
 call deactivate pj4
 call conda deactivate
 

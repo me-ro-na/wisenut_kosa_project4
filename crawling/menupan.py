@@ -21,7 +21,7 @@ while run:
   html = browser.page_source
   soup = BeautifulSoup(html,'html.parser')
   figs = soup.find_all("dl")
-  for i in range(15):
+  for i in range(len(figs)):
     a = del_html_tag(str(figs[i].find("a")))
     menupan.append(a)
     
@@ -39,3 +39,5 @@ fName = f'crawling/datas/restaurant_menupan_{dt.year}_{dt.month}_{dt.day}.csv'
 fName = rf'{os.path.abspath(fName)}'
 
 df.to_csv(fName, sep=',', encoding='utf-8-sig', index=False)
+
+# %%

@@ -51,7 +51,7 @@ print("[NAVER_HOTEL] data to csv file")
 resultDict = dict(Questions = title_list)
 
 dt = datetime.datetime.now()
-fName = f'crawling/questions/hotel_naver_{dt.year}_{dt.month}_{dt.day}.csv'
+fName = f'crawling/datas/questions/hotel_naver_{dt.year}_{dt.month}_{dt.day}.csv'
 fName = rf'{os.path.abspath(fName)}'
 df = pd.DataFrame(resultDict)
 

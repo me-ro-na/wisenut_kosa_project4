@@ -8,6 +8,7 @@ def del_html_tag(raw_text):
 
 # file_path = './mango_200.txt'
 file_path = rf"{os.path.abspath('crawling/datas/pre_data/mango(1_226).txt')}"
+# file_path = rf"{os.path.abspath('datas/pre_data/mango(1_226).txt')}"
 
 with open(file_path, 'rt', encoding='UTF8') as f:
   lines = f.readlines()
@@ -34,11 +35,13 @@ food_list = []
 food_url = []
 
 browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
+# browser = webdriver.Chrome(rf"{os.path.abspath('utils/chromedriver')}")
 for idx, data in enumerate(lines):
   page_number = 1
   run=True
   while run:
     # 처음 접속해서 받아오는 정보, 상세정보에 들어가기 위한 url, pagination
+    print(data, page_number, sep=", ")
     browser.get(f'https://www.mangoplate.com/search/{data}?keyword={data}&page={str(page_number)}')
     time.sleep(5)
     last_page = 10
@@ -48,8 +51,7 @@ for idx, data in enumerate(lines):
     figs = soup.find_all("figure", "restaurant-item")
     for i in range(len(figs)):
       food_list.append(figs[i].find("a")["href"])
-
-    if int(last_page) == page_number:
+    if(not figs or last_page == page_number):
       run = False
     else:
       page_number +=1
