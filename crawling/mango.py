@@ -6,8 +6,8 @@ from selenium import webdriver
 def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
-# 이거 파일!
-file_path = './mango_200.txt'
+# file_path = './mango_200.txt'
+file_path = rf"{os.path.abspath('crawling/datas/pre_data/mango(1_226).txt')}"
 
 with open(file_path, 'rt', encoding='UTF8') as f:
   lines = f.readlines()
@@ -159,6 +159,7 @@ for i in range(len(food_url)):
   
 food_df = pd.DataFrame({'id':food_url,'name':name_list,'rank':rank_list,'review':review_list,'thumbnail':thumbnail_list, 'addr':addr_list, 'call':call_list, 'type':type_list, 'price':pran_list, 'park':park_list, 'time':time_list, 'break':break_list, 'holiday':holi_list, 'menu':menu_list})
 
+print(food_df)
 print("[MANGO_RESTAURANT] data to csv file")
 
 dt = datetime.datetime.now()

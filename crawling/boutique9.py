@@ -22,15 +22,18 @@ while run:
   soup = BeautifulSoup(html,'html.parser') 
   figs = soup.find_all("div", "area")
   for i in range(len(figs)):
-    a = del_html_tag(str(figs[i].find_all("a")))
-    boutique.append(a)
+    a = del_html_tag(str(figs[i].find_all("a")[0]).replace("비밀글", "")).strip()
+    if("답글RE" not in a and a not in boutique):
+    #     design.append(a)
+      boutique.append(a)
   if int(last_page) == page_number:
     run = False
   else:
     page_number +=1
 
 
-df = pd.DataFrame({'list':boutique})
+resultDict = dict(Questions = boutique)
+df = pd.DataFrame(resultDict)
 
 print("[BOUTIQUE9_HOTEL] data to csv file")
 

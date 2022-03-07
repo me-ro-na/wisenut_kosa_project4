@@ -30,7 +30,8 @@ while run:
   else:
     page_number +=1
 
-df = pd.DataFrame({'list':menupan})
+resultDict = dict(Questions = menupan)
+df = pd.DataFrame(resultDict)
 print("[MENUPAN_RESTAURANT] data to csv file")
 
 dt = datetime.datetime.now()

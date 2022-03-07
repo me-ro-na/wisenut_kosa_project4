@@ -18,13 +18,13 @@ while (page <= 5):
     trs = tbody.select("tr")
     for tags in trs[4:len(trs)-2:2]:
         td = tags.select("td")[1]
-        title = del_html_tag(str(tags.select("td")[1].select("nobr>a>span"))).strip()
-
+        title = del_html_tag(str(tags.select("td")[1].select("nobr>a>span")[0])).strip()
         if title not in titles:
             titles.append(title)
     page +=1
 
-df = pd.DataFrame({'title':titles})
+resultDict = dict(Questions = titles)
+df = pd.DataFrame(resultDict)
 
 print("[HOTELMON_HOTEL] data to csv file")
 

@@ -7,7 +7,6 @@ def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
 design = []
-# browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
 browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
 
 page_number = 1
