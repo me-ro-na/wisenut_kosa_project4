@@ -112,7 +112,7 @@ for i in range(len(food_url)):
     if(info3 is not None):
       info3_tr = info3.parent
       c = del_html_tag(str(info3_tr.find_all("td")))
-      type_list[i] = c
+      type_list[i] = c[2:-2].split("/")
     
     info4 = trs[j].find("th", text="가격대")
     if(info4 is not None):
