@@ -1,3 +1,4 @@
+# %%
 from bs4 import BeautifulSoup
 import pandas as pd
 import time, os, datetime
@@ -6,34 +7,19 @@ from selenium import webdriver
 def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
-file_path = rf"{os.path.abspath('crawling/datas/pre_data/mango(1_226).txt')}"
-# file_path = rf"{os.path.abspath('datas/pre_data/mango(1_226).txt')}"
+# file_path = rf"{os.path.abspath('crawling/datas/pre_data/mango(1_226).txt')}"
+file_path = rf"{os.path.abspath('datas/pre_data/mango(1_226).txt')}"
 
 with open(file_path, 'rt', encoding='UTF8') as f:
   lines = f.readlines()
 
 lines = [line.rstrip('\n') for line in lines]
 
-name_list = []
-rank_list = []
-
-addr_list = [] # 주소
-call_list = [] # 전화번호
-type_list = [] # 음식종류
-pran_list = [] # 가격대
-park_list = [] # 주차
-time_list = [] # 영업시간
-break_list = [] # 쉬는시간
-holi_list = [] # 휴일
-menu_list = [] # 메뉴
-
-review_list =[]
-thumbnail_list = [] 
-
 food_list = []
 food_url = []
 
-browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
+# browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
+browser = webdriver.Chrome(rf"{os.path.abspath('utils/chromedriver')}")
 for idx, data in enumerate(lines):
   page_number = 1
   run=True
@@ -58,8 +44,15 @@ for idx, data in enumerate(lines):
     for i in food_list:
       if i not in food_url:
         food_url.append(i)
-
+# %%
 food_len = len(food_url)
+
+name_list = [0] * food_len
+rank_list = [0] * food_len
+
+review_list = [0] * food_len
+thumbnail_list = [0] * food_len
+
 addr_list = [[0]] * food_len # 주소
 call_list = [0] * food_len # 전화번호
 type_list = [0] * food_len # 음식종류
@@ -72,10 +65,11 @@ menu_list = [0] * food_len # 메뉴
 price_list = [0] * food_len # 메뉴
 
 
-
+# %%
 # 한 페이지 안에 있는 맛집 상세정보 가져오기
 for i in range(len(food_url)):
   url = "https://www.mangoplate.com" + food_url[i]
+  print(food_url[i])
   browser.get(url)
   html = browser.page_source
   soup = BeautifulSoup(html, 'html.parser')
@@ -95,13 +89,14 @@ for i in range(len(food_url)):
   trs = tbody.find_all("tr")
 
   for j in range(len(trs)):
+    print(j)
     info1 = trs[j].find("th", text="주소")
     if(info1 is not None):
       info1_tr = info1.parent
       addr = del_html_tag(str(info1_tr.find_all("td")[0])).split("지번")
       addrs = []
-      addrs.append(addr[0].strip())
-      addrs.append(addr[1].strip())
+      for addr_ in addr:
+        addrs.append(addr_.strip())
       addr_list[i] = addrs
 
     info2 = trs[j].find("th", text="전화번호")
@@ -169,15 +164,16 @@ for i in range(len(food_url)):
   except TypeError:
     a = None
   thumbnail_list.append(a)
-  
-food_df = pd.DataFrame({'id':food_url,'name':name_list,'rank':rank_list,'review':review_list,'thumbnail':thumbnail_list, 'addr':addr_list, 'call':call_list, 'type':type_list, 'price':pran_list, 'park':park_list, 'time':time_list, 'break':break_list, 'holiday':holi_list, 'menu':menu_list})
 
+# %% 
+food_df = pd.DataFrame({'id':food_url,'name':name_list,'rank':rank_list,'review':review_list,'thumbnail':thumbnail_list, 'addr':addr_list, 'call':call_list, 'type':type_list, 'price':pran_list, 'park':park_list, 'time':time_list, 'break':break_list, 'holiday':holi_list, 'menu':menu_list})
+# %%
 print(food_df)
 print("[MANGO_RESTAURANT] data to csv file")
 
 dt = datetime.datetime.now()
-# fName = f'datas/restaurant_mango_{dt.year}_{dt.month}_{dt.day}.csv'
-fName = f'crawling/datas/restaurant_mango_{dt.year}_{dt.month}_{dt.day}.csv'
+fName = f'datas/restaurant_mango_{dt.year}_{dt.month}_{dt.day}.csv'
+# fName = f'crawling/datas/restaurant_mango_{dt.year}_{dt.month}_{dt.day}.csv'
 fName = rf'{os.path.abspath(fName)}'
 
 food_df.to_csv(fName, sep=',', encoding='utf-8-sig', index=False)
