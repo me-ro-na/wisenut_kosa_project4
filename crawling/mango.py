@@ -7,6 +7,7 @@ def del_html_tag(raw_text):
     return BeautifulSoup(raw_text, "lxml").text
 
 file_path = rf"{os.path.abspath('crawling/datas/pre_data/mango(1_226).txt')}"
+# file_path = rf"{os.path.abspath('datas/pre_data/mango(1_226).txt')}"
 
 with open(file_path, 'rt', encoding='UTF8') as f:
   lines = f.readlines()
@@ -26,14 +27,13 @@ break_list = [] # 쉬는시간
 holi_list = [] # 휴일
 menu_list = [] # 메뉴
 
-review_list =[] 
+review_list =[]
 thumbnail_list = [] 
 
 food_list = []
 food_url = []
 
 browser = webdriver.Chrome(rf"{os.path.abspath('crawling/utils/chromedriver')}")
-
 for idx, data in enumerate(lines):
   page_number = 1
   run=True
@@ -70,6 +70,8 @@ break_list = [0] * food_len # 쉬는시간
 holi_list = [0] * food_len # 휴일
 menu_list = [0] * food_len # 메뉴
 price_list = [0] * food_len # 메뉴
+
+
 
 # 한 페이지 안에 있는 맛집 상세정보 가져오기
 for i in range(len(food_url)):
@@ -156,10 +158,9 @@ for i in range(len(food_url)):
         price.append(li.find("span", "Restaurant_MenuPrice").text)
       menu_list[i] = menu
       price_list[i] = price
-
   #리뷰
-  review = soup.select_one('li:nth-child(1) > a > div.RestaurantReviewItem__ReviewContent > div > p').get_text().strip()
-  try:review_list.append(review)
+  review = soup.select_one('li:nth-child(1) > a > div.RestaurantReviewItem__ReviewContent > div > p')
+  try:review_list.append(review.get_text().strip())
   except:review_list.append("")
 
   # 이미지
@@ -175,6 +176,7 @@ print(food_df)
 print("[MANGO_RESTAURANT] data to csv file")
 
 dt = datetime.datetime.now()
+# fName = f'datas/restaurant_mango_{dt.year}_{dt.month}_{dt.day}.csv'
 fName = f'crawling/datas/restaurant_mango_{dt.year}_{dt.month}_{dt.day}.csv'
 fName = rf'{os.path.abspath(fName)}'
 
